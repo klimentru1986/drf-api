@@ -18,6 +18,15 @@
 			"dependsOn": [
 				"docker-build"
 			],
+			"dockerRun": {
+				"network": "drf-api_default",
+				"env": {
+					"DB_HOST":"db",
+					"DB_NAME":"drfapi",
+					"DB_USER":"postgres",
+					"DB_PASS":"postgres"
+				}
+			},
 			"python": {
 				"args": [
 					"runserver",
