@@ -10,4 +10,4 @@ before_script:
   - pip install docker-compose
 
 script:
-  - docker-compose run --rm drfapi sh -c "python app/manage.py test"
+  - docker-compose run --rm drfapi sh -c "python manage.py test"
