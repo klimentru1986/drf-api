@@ -20,13 +20,9 @@ COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
 
 WORKDIR /app
-COPY . /app
-
-# During debugging, this entry point will be overridden. For more information, please refer to https://aka.ms/vscode-docker-python-debug
-# File wsgi.py was not found in subfolder: 'publications_drf'. Please enter the Python path to wsgi file.
-RUN chmod +x /app/entrypoint.sh
+COPY ./app /app
 
 # Change to a non-root user
 USER ${APP_USER}:${APP_USER}
 
-ENTRYPOINT ["sh", "/app/entrypoint.sh"]
+CMD ["gunicorn", "project.wsgi:application", "-c", "gunicorn.conf.py"]
