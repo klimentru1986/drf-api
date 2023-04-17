@@ -21,6 +21,13 @@ services:
       - ./.env/dev.env
     depends_on:
       - db
+  drfapi_lint:
+    command: flake8
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    profiles:
+      - lint
   db:
     image: postgres:10-alpine
     env_file:
