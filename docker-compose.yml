@@ -2,6 +2,7 @@ version: '3.4'
 
 services:
   drfapi:
+    image: drfapi:latest
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -22,18 +23,14 @@ services:
     depends_on:
       - drfapi_db
   drfapi_lint:
+    image: drfapi
     command: flake8
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     profiles:
       - lint
 
   drfapi_test:
+    image: drfapi
     command: python manage.py test
-    build:
-      context: .
-      dockerfile: ./Dockerfile
     env_file:
       - ./.env/dev.env
     profiles:

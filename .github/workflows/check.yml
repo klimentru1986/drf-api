@@ -2,17 +2,21 @@ name: Check
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: lint
-      run: docker-compose run --build --rm drfapi_lint
+      - uses: actions/checkout@v3
+      - name: prepare
+        run: docker-compose build drfapi
+      - name: lint
+        run: docker-compose run --rm drfapi_lint
+      - name: test
+        run: docker-compose --env-file ./.env/test.env run --rm drfapi_test
+      - name: post-check
+        run: docker-compose down -v
