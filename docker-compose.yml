@@ -10,7 +10,7 @@ services:
     env_file:
       - ./.env/dev.env
     depends_on:
-      - db
+      - drfapi_db
       - drfapi_migrations
   drfapi_migrations:
     command: python manage.py migrate
@@ -20,7 +20,7 @@ services:
     env_file:
       - ./.env/dev.env
     depends_on:
-      - db
+      - drfapi_db
   drfapi_lint:
     command: flake8
     build:
@@ -28,7 +28,20 @@ services:
       dockerfile: ./Dockerfile
     profiles:
       - lint
-  db:
+
+  drfapi_test:
+    command: python manage.py test
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./.env/dev.env
+    profiles:
+      - test
+    depends_on:
+      - drfapi_db
+
+  drfapi_db:
     image: postgres:10-alpine
     env_file:
       - ./.env/dev.env
