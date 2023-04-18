@@ -16,6 +16,8 @@ jobs:
         run: docker-compose build drfapi
       - name: lint
         run: docker-compose run --rm drfapi_lint
+      - name: up_db
+        run: docker-compose --env-file ./.env/test.env up --build -d drfapi_db
       - name: test
         run: docker-compose --env-file ./.env/test.env run --rm drfapi_test
       - name: post-check
