@@ -13,9 +13,10 @@ ENV PYTHONUNBUFFERED=1
 ARG APP_USER=appuser
 RUN groupadd -r ${APP_USER} && useradd --no-log-init -r -g ${APP_USER} ${APP_USER}
 
-RUN apt update && apt install -y libmagic1
+RUN apt update && apt install -y libmagic1 libpq5
 
 # Install pip requirements
+RUN python -m pip install --upgrade pip
 COPY requirements.txt .
 RUN python -m pip install -r requirements.txt
 
