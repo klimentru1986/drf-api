@@ -39,7 +39,7 @@ services:
       - drfapi_db
 
   drfapi_db:
-    image: postgres:10-alpine
+    image: postgres:12-alpine
     env_file:
       - ./.env/dev.env
     ports:
