@@ -14,7 +14,7 @@ services:
       - drfapi_db
       - drfapi_migrations
   drfapi_migrations:
-    command: python manage.py migrate
+    command: sh -c "python manage.py wait_for_db && python manage.py migrate"
     build:
       context: .
       dockerfile: ./Dockerfile
@@ -30,7 +30,7 @@ services:
 
   drfapi_test:
     image: drfapi
-    command: python manage.py test
+    command: sh -c "python manage.py wait_for_db && python manage.py test"
     env_file:
       - ./.env/dev.env
     profiles:

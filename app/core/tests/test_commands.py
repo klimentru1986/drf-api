@@ -4,17 +4,17 @@ from django.core.management import call_command
 from django.db.utils import OperationalError
 
 
+@patch('core.management.commands.wait_for_db.Command.check')
 class CommandTests(TestCase):
 
-    def test_wait_for_db_ready(self):
-        with patch("django.db.utils.ConnectionHandler.__getitem__") as gi:
-            gi.return_value = True
-            call_command('wait_for_db')
-            self.assertEqual(gi.call_count, 1)
+    def test_wait_for_db_ready(self, patched_check):
+        patched_check.return_value = True
+        call_command('wait_for_db')
+        patched_check.assert_called_once_with(databases=['default'])
 
-    @patch("time.sleep", return_value=True)
-    def test_wait_for_db(self, ts):
-        with patch("django.db.utils.ConnectionHandler.__getitem__") as gi:
-            gi.side_effect = [OperationalError] * 5 + [True]
-            call_command('wait_for_db')
-            self.assertEqual(gi.call_count, 6)
+    @patch("time.sleep")
+    def test_wait_for_db(self, patched_sleep, patched_check):
+        patched_check.side_effect = [OperationalError] * 5 + [True]
+        call_command('wait_for_db')
+        self.assertEqual(patched_check.call_count, 6)
+        patched_check.assert_called_with(databases=['default'])

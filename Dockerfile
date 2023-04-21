@@ -26,4 +26,4 @@ COPY ./app /app
 # Change to a non-root user
 USER ${APP_USER}:${APP_USER}
 
-CMD ["gunicorn", "project.wsgi:application", "-c", "gunicorn.conf.py"]
+CMD ["sh", "-c", "python manage.py wait_for_db && gunicorn project.wsgi:application -c gunicorn.conf.py"]
